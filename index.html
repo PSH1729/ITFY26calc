@@ -2,10 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tax Computation</title>
+    <title>Tax Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .calculator {
+            max-width: 400px;
+            margin: 50px auto;
+            text-align: left;
+        }
+        .output {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to the Tax Computation Page!</h1>
-    <p>Here you can compute your taxes based on the latest tax slabs.</p>
+    <div class="calculator">
+        <h1>Simple Tax Calculator</h1>
+        <form id="taxForm">
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" required><br><br>
+
+            <label for="age">Your Age:</label>
+            <input type="number" id="age" required><br><br>
+
+            <label for="income">Annual Income:</label>
+            <input type="number" id="income" required><br><br>
+
+            <button type="button" onclick="calculateTax()">Calculate Tax</button>
+        </form>
+
+        <div class="output" id="results">
+            <p>Total Annual Income: <span id="totalIncome"></span></p>
+            <p>Standard Deduction: <span id="standardDeduction"></span></p>
+            <p>Other Deduction: <span id="otherDeduction"></span></p>
+            <p>Tax Liability: <span id="taxLiability"></span></p>
+            <p>Cess: <span id="cess"></span></p>
+            <p>Total Tax Payable: <span id="totalTax"></span></p>
+        </div>
+    </div>
+
+    <script>
+        function calculateTax() {
+            const income = parseFloat(document.getElementById('income').value);
+            const standardDeduction = 50000;  // Example
+            const otherDeduction = 30000;     // Example
+
+            const taxableIncome = income - standardDeduction - otherDeduction;
+            let taxLiability = 0;
+
+            if (taxableIncome > 1000000) {
+                taxLiability = (taxableIncome - 1000000) * 0.20 + 150000;
+            } else if (taxableIncome > 500000) {
+                taxLiability = (taxableIncome - 500000) * 0.10 + 25000;
+            }
+
+            const cess = taxLiability * 0.04; // Cess as 4% of tax liability
+            const totalTax = taxLiability + cess;
+
+            document.getElementById('totalIncome').innerText = income;
+            document.getElementById('standardDeduction').innerText = standardDeduction;
+            document.getElementById('otherDeduction').innerText = otherDeduction;
+            document.getElementById('taxLiability').innerText = taxLiability;
+            document.getElementById('cess').innerText = cess;
+            document.getElementById('totalTax').innerText = totalTax;
+        }
+    </script>
 </body>
 </html>
