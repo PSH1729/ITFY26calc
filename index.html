@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tax Calculator</title>
+    <title>FY2025-26 Income Tax Calculator</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f9;
+            background-color: #ffffff;
             color: #333;
             margin: 0;
             padding: 20px;
@@ -15,14 +15,15 @@
             max-width: 600px;
             margin: 60px auto;
             padding: 30px;
-            background-color: #ffffff;
+            background-color: #ffebcd; /* Lighter coral color for background */
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid #ffa07a; /* Coral border */
         }
         h1 {
             font-size: 24px;
             text-align: center;
-            color: #444;
+            color: #d2691e; /* Chocolate color for text */
         }
         form {
             margin-bottom: 30px;
@@ -31,6 +32,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
+            color: #a0522d; /* Sienna color for labels */
         }
         input[type="text"], input[type="number"] {
             width: 100%;
@@ -42,13 +44,13 @@
             transition: border-color 0.2s;
         }
         input[type="text"]:focus, input[type="number"]:focus {
-            border-color: #5dade2;
+            border-color: #ff7f50; /* Coral color on focus */
         }
         button {
             display: block;
             width: 100%;
             padding: 12px;
-            background-color: #5dade2;
+            background-color: #ff4500; /* OrangeRed for button */
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -57,18 +59,22 @@
             transition: background-color 0.3s;
         }
         button:hover {
-            background-color: #549ecda;
+            background-color: #e63946; /* Hover color */
         }
         .output {
             margin-top: 20px;
             padding: 15px;
-            background-color: #f9f9f9;
+            background-color: #f0ffff; /* Azure background */
             border: 1px solid #ececec;
             border-radius: 10px;
         }
         .output p {
             margin: 8px 0;
             font-size: 14px;
+        }
+        .output span {
+            color: #2e8b57; /* SeaGreen color for results */
+            font-weight: bold;
         }
     </style>
 </head>
