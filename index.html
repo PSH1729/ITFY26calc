@@ -1,73 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Tax Calculator</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .calculator {
-            max-width: 400px;
-            margin: 50px auto;
-            text-align: left;
-        }
-        .output {
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-    <div class="calculator">
-        <h1>Simple Tax Calculator</h1>
-        <form id="taxForm">
-            <label for="name">Your Name:</label>
-            <input type="text" id="name" required><br><br>
+function calculateTax() {
+    const income = parseFloat(document.getElementById('income').value);
+    const standardDeduction = 75000; // Updated standard deduction
 
-            <label for="age">Your Age:</label>
-            <input type="number" id="age" required><br><br>
+    // Calculate taxable income
+    let taxableIncome = income - standardDeduction;
+    if (taxableIncome < 0) {
+        taxableIncome = 0; // Avoid negative taxable income
+    }
 
-            <label for="income">Annual Income:</label>
-            <input type="number" id="income" required><br><br>
+    let taxLiability = 0;
 
-            <button type="button" onclick="calculateTax()">Calculate Tax</button>
-        </form>
+    // Apply the updated tax rates based on slabs
+    if (taxableIncome > 2400000) {
+        taxLiability += (taxableIncome - 2400000) * 0.30;
+        taxableIncome = 2400000;
+    }
+    if (taxableIncome > 2000000) {
+        taxLiability += (taxableIncome - 2000000) * 0.25;
+        taxableIncome = 2000000;
+    }
+    if (taxableIncome > 1600000) {
+        taxLiability += (taxableIncome - 1600000) * 0.20;
+        taxableIncome = 1600000;
+    }
+    if (taxableIncome > 1200000) {
+        taxLiability += (taxableIncome - 1200000) * 0.15;
+        taxableIncome = 1200000;
+    }
+    if (taxableIncome > 800000) {
+        taxLiability += (taxableIncome - 800000) * 0.10;
+        taxableIncome = 800000;
+    }
+    if (taxableIncome > 400000) {
+        taxLiability += (taxableIncome - 400000) * 0.05;
+    }
 
-        <div class="output" id="results">
-            <p>Total Annual Income: <span id="totalIncome"></span></p>
-            <p>Standard Deduction: <span id="standardDeduction"></span></p>
-            <p>Other Deduction: <span id="otherDeduction"></span></p>
-            <p>Tax Liability: <span id="taxLiability"></span></p>
-            <p>Cess: <span id="cess"></span></p>
-            <p>Total Tax Payable: <span id="totalTax"></span></p>
-        </div>
-    </div>
+    const cess = taxLiability * 0.04; // Applying 4% cess
+    const totalTax = taxLiability + cess;
 
-    <script>
-        function calculateTax() {
-            const income = parseFloat(document.getElementById('income').value);
-            const standardDeduction = 50000;  // Example
-            const otherDeduction = 30000;     // Example
-
-            const taxableIncome = income - standardDeduction - otherDeduction;
-            let taxLiability = 0;
-
-            if (taxableIncome > 1000000) {
-                taxLiability = (taxableIncome - 1000000) * 0.20 + 150000;
-            } else if (taxableIncome > 500000) {
-                taxLiability = (taxableIncome - 500000) * 0.10 + 25000;
-            }
-
-            const cess = taxLiability * 0.04; // Cess as 4% of tax liability
-            const totalTax = taxLiability + cess;
-
-            document.getElementById('totalIncome').innerText = income;
-            document.getElementById('standardDeduction').innerText = standardDeduction;
-            document.getElementById('otherDeduction').innerText = otherDeduction;
-            document.getElementById('taxLiability').innerText = taxLiability;
-            document.getElementById('cess').innerText = cess;
-            document.getElementById('totalTax').innerText = totalTax;
-        }
-    </script>
-</body>
-</html>
+    // Display results
+    document.getElementById('totalIncome').innerText = income.toFixed(2);
+    document.getElementById('standardDeduction').innerText = standardDeduction.toFixed(2);
+    document.getElementById('taxLiability').innerText = taxLiability.toFixed(2);
+    document.getElementById('cess').innerText = cess.toFixed(2);
+    document.getElementById('totalTax').innerText = totalTax.toFixed(2);
+}
