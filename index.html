@@ -57,7 +57,11 @@
             <p>Total Annual Income: <span id="totalIncome"></span></p>
             <p>Standard Deduction: <span id="standardDeduction"></span></p>
             <p>Tax Liability: <span id="taxLiability"></span></p>
+            <p>Tax Rebate: <span id="taxRebate"></span></p>
+            <!-- New Row for Tax Rebate -->
             <p>Cess: <span id="cess"></span></p>
+            <p>Rich Tax: <span id="surcharge"></span></p>
+            <!-- New Row for Surcharge -->
             <p>Total Tax Payable: <span id="totalTax"></span></p>
         </div>
     </div>
@@ -66,6 +70,9 @@
         function calculateTax() {
             const income = parseFloat(document.getElementById('income').value);
             const standardDeduction = 75000; // Standard deduction
+            let taxLiability = 0;
+            let taxRebate = 0;
+            let surcharge = 0;
 
             // Calculate taxable income
             let taxableIncome = income - standardDeduction;
@@ -73,41 +80,56 @@
                 taxableIncome = 0; // Avoid negative taxable income
             }
 
-            let taxLiability = 0;
+            // Apply the updated tax rates based on slabs, if no rebate
+            if (taxableIncome >= 1200000) {
+                if (taxableIncome > 2400000) {
+                    taxLiability += (taxableIncome - 2400000) * 0.30;
+                    taxableIncome = 2400000;
+                }
+                if (taxableIncome > 2000000) {
+                    taxLiability += (taxableIncome - 2000000) * 0.25;
+                    taxableIncome = 2000000;
+                }
+                if (taxableIncome > 1600000) {
+                    taxLiability += (taxableIncome - 1600000) * 0.20;
+                    taxableIncome = 1600000;
+                }
+                if (taxableIncome > 1200000) {
+                    taxLiability += (taxableIncome - 1200000) * 0.15;
+                }
 
-            // Apply the updated tax rates based on slabs
-            if (taxableIncome > 2400000) {
-                taxLiability += (taxableIncome - 2400000) * 0.30;
-                taxableIncome = 2400000;
-            }
-            if (taxableIncome > 2000000) {
-                taxLiability += (taxableIncome - 2000000) * 0.25;
-                taxableIncome = 2000000;
-            }
-            if (taxableIncome > 1600000) {
-                taxLiability += (taxableIncome - 1600000) * 0.20;
-                taxableIncome = 1600000;
-            }
-            if (taxableIncome > 1200000) {
-                taxLiability += (taxableIncome - 1200000) * 0.15;
-                taxableIncome = 1200000;
-            }
-            if (taxableIncome > 800000) {
-                taxLiability += (taxableIncome - 800000) * 0.10;
-                taxableIncome = 800000;
-            }
-            if (taxableIncome > 400000) {
-                taxLiability += (taxableIncome - 400000) * 0.05;
+                if (taxableIncome > 800000) {
+                    taxLiability += (taxableIncome - 800000) * 0.10;
+                    taxableIncome = 800000;
+                }
+                if (taxableIncome > 400000) {
+                    taxLiability += (taxableIncome - 400000) * 0.05;
+                }
+            } else {
+                taxRebate = taxLiability; // Full rebate for income below 12 lakhs
+                taxLiability = 0;
             }
 
             const cess = taxLiability * 0.04; // Applying 4% cess
-            const totalTax = taxLiability + cess;
+
+            // Surcharge Logic
+            if (income > 5000000 && income < 10000000) {
+                surcharge = taxLiability * 0.10;
+            } else if (income >= 10000000 && income < 20000000) {
+                surcharge = taxLiability * 0.15;
+            } else if (income >= 20000000 && income < 50000000) {
+                surcharge = taxLiability * 0.25;
+            }
+
+            const totalTax = taxLiability + cess + surcharge;
 
             // Display results
             document.getElementById('totalIncome').innerText = income.toFixed(2);
             document.getElementById('standardDeduction').innerText = standardDeduction.toFixed(2);
             document.getElementById('taxLiability').innerText = taxLiability.toFixed(2);
+            document.getElementById('taxRebate').innerText = taxRebate.toFixed(2);
             document.getElementById('cess').innerText = cess.toFixed(2);
+            document.getElementById('surcharge').innerText = surcharge.toFixed(2);
             document.getElementById('totalTax').innerText = totalTax.toFixed(2);
         }
     </script>
