@@ -73,8 +73,10 @@
             font-size: 14px;
         }
         .output span {
-            color: #2e8b57; /* SeaGreen color for results */
             font-weight: bold;
+        }
+        .highlight-red {
+            color: #ff4500; /* Red color for important values */
         }
     </style>
 </head>
@@ -94,11 +96,11 @@
         <div class="output" id="results">
             <p>Total Annual Income: <span id="totalIncome"></span></p>
             <p>Standard Deduction: <span id="standardDeduction"></span></p>
-            <p>Tax Liability: <span id="taxLiability"></span></p>
+            <p>Tax Liability: <span id="taxLiability" class="highlight-red"></span></p>
             <p>Tax Rebate: <span id="taxRebate"></span></p>
-            <p>Cess: <span id="cess"></span></p>
-            <p>Rich Tax (Surcharge): <span id="surcharge"></span></p>
-            <p>Total Tax Payable: <span id="totalTax"></span></p>
+            <p>Cess: <span id="cess" class="highlight-red"></span></p>
+            <p>Rich Tax (Surcharge): <span id="surcharge" class="highlight-red"></span></p>
+            <p>Total Tax Payable: <span id="totalTax" class="highlight-red"></span></p>
         </div>
     </div>
 
