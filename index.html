@@ -80,39 +80,40 @@
                 taxableIncome = 0; // Avoid negative taxable income
             }
 
-            // Apply the updated tax rates based on slabs, if no rebate
-            if (taxableIncome >= 1200000) {
-                if (taxableIncome > 2400000) {
-                    taxLiability += (taxableIncome - 2400000) * 0.30;
-                    taxableIncome = 2400000;
-                }
-                if (taxableIncome > 2000000) {
-                    taxLiability += (taxableIncome - 2000000) * 0.25;
-                    taxableIncome = 2000000;
-                }
-                if (taxableIncome > 1600000) {
-                    taxLiability += (taxableIncome - 1600000) * 0.20;
-                    taxableIncome = 1600000;
-                }
-                if (taxableIncome > 1200000) {
-                    taxLiability += (taxableIncome - 1200000) * 0.15;
-                }
+            // Calculate tax normally
+            if (taxableIncome > 2400000) {
+                taxLiability += (taxableIncome - 2400000) * 0.30;
+                taxableIncome = 2400000;
+            }
+            if (taxableIncome > 2000000) {
+                taxLiability += (taxableIncome - 2000000) * 0.25;
+                taxableIncome = 2000000;
+            }
+            if (taxableIncome > 1600000) {
+                taxLiability += (taxableIncome - 1600000) * 0.20;
+                taxableIncome = 1600000;
+            }
+            if (taxableIncome > 1200000) {
+                taxLiability += (taxableIncome - 1200000) * 0.15;
+                taxableIncome = 1200000;
+            }
+            if (taxableIncome > 800000) {
+                taxLiability += (taxableIncome - 800000) * 0.10;
+                taxableIncome = 800000;
+            }
+            if (taxableIncome > 400000) {
+                taxLiability += (taxableIncome - 400000) * 0.05;
+            }
 
-                if (taxableIncome > 800000) {
-                    taxLiability += (taxableIncome - 800000) * 0.10;
-                    taxableIncome = 800000;
-                }
-                if (taxableIncome > 400000) {
-                    taxLiability += (taxableIncome - 400000) * 0.05;
-                }
-            } else {
-                taxRebate = taxLiability; // Full rebate for income below 12 lakhs
-                taxLiability = 0;
+            // Apply tax rebate if taxable income is less than or equal to 12 lakhs
+            if (income <= 1200000) {
+                taxRebate = taxLiability;
+                taxLiability = 0; // Final payable tax should be zero
             }
 
             const cess = taxLiability * 0.04; // Applying 4% cess
 
-            // Surcharge Logic
+            // Surcharge Logic (Rich Tax)
             if (income > 5000000 && income < 10000000) {
                 surcharge = taxLiability * 0.10;
             } else if (income >= 10000000 && income < 20000000) {
@@ -126,7 +127,7 @@
             // Display results
             document.getElementById('totalIncome').innerText = income.toFixed(2);
             document.getElementById('standardDeduction').innerText = standardDeduction.toFixed(2);
-            document.getElementById('taxLiability').innerText = taxLiability.toFixed(2);
+            document.getElementById('taxLiability').innerText = (taxLiability + taxRebate).toFixed(2); // Show calculated tax before rebate
             document.getElementById('taxRebate').innerText = taxRebate.toFixed(2);
             document.getElementById('cess').innerText = cess.toFixed(2);
             document.getElementById('surcharge').innerText = surcharge.toFixed(2);
