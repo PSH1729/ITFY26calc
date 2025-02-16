@@ -58,10 +58,8 @@
             <p>Standard Deduction: <span id="standardDeduction"></span></p>
             <p>Tax Liability: <span id="taxLiability"></span></p>
             <p>Tax Rebate: <span id="taxRebate"></span></p>
-            <!-- New Row for Tax Rebate -->
             <p>Cess: <span id="cess"></span></p>
-            <p>Rich Tax: <span id="surcharge"></span></p>
-            <!-- New Row for Surcharge -->
+            <p>Rich Tax (Surcharge): <span id="surcharge"></span></p>
             <p>Total Tax Payable: <span id="totalTax"></span></p>
         </div>
     </div>
@@ -106,7 +104,7 @@
             }
 
             // Apply tax rebate if taxable income is less than or equal to 12 lakhs
-            if (income <= 1200000) {
+            if (taxableIncome <= 1200000) {
                 taxRebate = taxLiability;
                 taxLiability = 0; // Final payable tax should be zero
             }
