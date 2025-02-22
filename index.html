@@ -24,6 +24,12 @@
             font-size: 24px;
             text-align: center;
             color: #d2691e;
+            margin-bottom: 10px;
+        }
+        h2 {
+            font-size: 16px;
+            text-align: center;
+            color: #d2691e;
             margin-bottom: 20px;
         }
         form {
@@ -34,6 +40,9 @@
             margin-bottom: 8px;
             font-weight: bold;
             color: #a0522d;
+        }
+        .asterisk {
+            color: #ff4500;
         }
         input[type="text"], input[type="number"] {
             width: 100%;
@@ -90,11 +99,9 @@
 <body>
     <div class="calculator-container">
         <h1>FY2025-26 Income Tax Calculator</h1>
+        <h2>Income tax calculator for FY25-26 based on new tax regime only for now. More options to be available soon. Thanks for being part of this testing phase :)</h2>
         <form id="taxForm">
-            <label for="name">Your Name:</label>
-            <input type="text" id="name" required>
-
-            <label for="income">Annual Income:</label>
+            <label for="income">Annual Gross Salary<span class="asterisk">*</span>:</label>
             <input type="number" id="income" required>
 
             <button type="button" onclick="calculateTax()">Calculate Tax</button>
