@@ -12,7 +12,7 @@
             padding: 20px;
         }
         .calculator-container {
-            max-width: 600px;
+            max-width: 700px;
             margin: 60px auto;
             padding: 30px;
             background-color: #ffebcd;
@@ -35,7 +35,7 @@
             font-weight: bold;
             color: #a0522d;
         }
-        input[type="text"], input[type="number"] {
+        input[type="text"], input[type="number"], select {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
@@ -44,7 +44,7 @@
             box-sizing: border-box;
             transition: border-color 0.2s;
         }
-        input[type="text"]:focus, input[type="number"]:focus {
+        input[type="text"]:focus, input[type="number"]:focus, select:focus {
             border-color: #ff7f50;
         }
         button {
@@ -97,6 +97,18 @@
             <label for="income">Annual Income:</label>
             <input type="number" id="income" required>
 
+            <label for="taxRegime">Tax Regime:</label>
+            <select id="taxRegime">
+                <option value="old">Old Tax Regime</option>
+                <option value="new">New Tax Regime</option>
+            </select>
+
+            <label for="financialYear">Financial Year:</label>
+            <select id="financialYear">
+                <option value="FY25-26">FY2025-26</option>
+                <option value="FY24-25">FY2024-25</option>
+            </select>
+
             <button type="button" onclick="calculateTax()">Calculate Tax</button>
         </form>
 
@@ -108,66 +120,56 @@
             <p>Cess: <span id="cess" class="highlight-red"></span></p>
             <p>Rich Tax (Surcharge): <span id="surcharge" class="highlight-red"></span></p>
             <p>Total Tax Payable: <span id="totalTax" class="highlight-red"></span></p>
+            <p>Tax Difference (Old vs New): <span id="taxDifference" class="highlight-red"></span></p>
+            <p>Tax Gain from Previous FY: <span id="taxGain" class="highlight-red"></span></p>
         </div>
     </div>
 
     <script>
+        // Example function to calculate tax based on multiple scenarios
         function calculateTax() {
             const income = parseFloat(document.getElementById('income').value);
-            const standardDeduction = 75000; // Standard deduction
+            const standardDeduction = 75000;
+            const taxRegime = document.getElementById('taxRegime').value;
+            const financialYear = document.getElementById('financialYear').value;
+
             let taxLiability = 0;
             let taxRebate = 0;
             let surcharge = 0;
 
-            // Calculate taxable income
-            let taxableIncome = income - standardDeduction;
-            if (taxableIncome < 0) {
-                taxableIncome = 0; // Avoid negative taxable income
+            // Assume some different tax rules based on selections
+            if (taxRegime === 'new' && financialYear === 'FY25-26') {
+                // Apply new tax regime rules for FY25-26
+                let taxableIncome = income - standardDeduction;
+
+                taxLiability = calculateNewRegimeTax(taxableIncome);
+
+            } else if (taxRegime === 'old') {
+                // Apply old tax regime (specific rules could be added here)
+                let taxableIncome = income - standardDeduction;
+                taxLiability = calculateOldRegimeTax(taxableIncome);
+            }
+            // Additional year-based logic (assuming hypothetical changes)
+            if (financialYear === 'FY24-25' && taxRegime === 'new') {
+                let taxableIncome = income - standardDeduction;
+                taxLiability = calculateNewRegimeTax_FY24(taxableIncome);
             }
 
-            // Calculate tax normally
-            if (taxableIncome > 2400000) {
-                taxLiability += (taxableIncome - 2400000) * 0.30;
-                taxableIncome = 2400000;
-            }
-            if (taxableIncome > 2000000) {
-                taxLiability += (taxableIncome - 2000000) * 0.25;
-                taxableIncome = 2000000;
-            }
-            if (taxableIncome > 1600000) {
-                taxLiability += (taxableIncome - 1600000) * 0.20;
-                taxableIncome = 1600000;
-            }
-            if (taxableIncome > 1200000) {
-                taxLiability += (taxableIncome - 1200000) * 0.15;
-                taxableIncome = 1200000;
-            }
-            if (taxableIncome > 800000) {
-                taxLiability += (taxableIncome - 800000) * 0.10;
-                taxableIncome = 800000;
-            }
-            if (taxableIncome > 400000) {
-                taxLiability += (taxableIncome - 400000) * 0.05;
-            }
+            const cess = taxLiability * 0.04;
 
-            // Apply tax rebate if taxable income is less than or equal to 12 lakhs
-            if (income - standardDeduction <= 1200000) {
-                taxRebate = taxLiability;
-                taxLiability = 0; // Final payable tax should be zero
-            }
-
-            const cess = taxLiability * 0.04; // Applying 4% cess
-
-            // Surcharge Logic (Rich Tax)
             if (income > 5000000 && income < 10000000) {
                 surcharge = taxLiability * 0.10;
             } else if (income >= 10000000 && income < 20000000) {
                 surcharge = taxLiability * 0.15;
-            } else if (income >= 20000000 && income < 50000000) {
+            } else if (income >= 20000000) {
                 surcharge = taxLiability * 0.25;
             }
 
             const totalTax = taxLiability + cess + surcharge;
+
+            // Example calculations for difference and gain
+            const taxDifference = calculateTaxDifference(income);
+            const taxGain = calculateTaxGain(income);
 
             // Display results
             document.getElementById('totalIncome').innerText = income.toFixed(2);
@@ -177,6 +179,44 @@
             document.getElementById('cess').innerText = cess.toFixed(2);
             document.getElementById('surcharge').innerText = surcharge.toFixed(2);
             document.getElementById('totalTax').innerText = totalTax.toFixed(2);
+            document.getElementById('taxDifference').innerText = taxDifference.toFixed(2);
+            document.getElementById('taxGain').innerText = taxGain.toFixed(2);
+        }
+
+        // Function stubs for calculations, replace with actual logic
+        function calculateNewRegimeTax(income) {
+            // New regime logic for FY25-26
+            let tax = 0;
+            if (income > 2400000) tax += (income - 2400000) * 0.30;
+            return tax;
+        }
+
+        function calculateOldRegimeTax(income) {
+            // Old regime logic
+            let tax = 0;
+            if (income > 2400000) tax += (income - 2400000) * 0.25;
+            return tax;
+        }
+
+        function calculateNewRegimeTax_FY24(income) {
+            // New regime logic for FY24-25
+            let tax = 0;
+            if (income > 2400000) tax += (income - 2400000) * 0.20;
+            return tax;
+        }
+
+        function calculateTaxDifference(income) {
+            // Calculate difference between old/new for demonstration
+            const newTax = calculateNewRegimeTax(income);
+            const oldTax = calculateOldRegimeTax(income);
+            return oldTax - newTax;
+        }
+
+        function calculateTaxGain(income) {
+            // Calculate gain due to FY change for demonstration
+            const newTax25 = calculateNewRegimeTax(income);
+            const newTax24 = calculateNewRegimeTax_FY24(income);
+            return newTax24 - newTax25;
         }
     </script>
 </body>
